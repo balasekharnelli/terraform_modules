@@ -19,6 +19,7 @@ module "tw_autoscaling" {
   ami_id            = "${var.ami_id}"
   max_num_instances = "${var.max_num_instances}"
   min_num_instances = "${var.min_num_instances}"
+  desired_capacity  = "${var.desired_capacity}"
   max_threshold     = "${var.max_threshold}"
   min_threshold     = "${var.min_threshold}"
 }
@@ -29,4 +30,11 @@ module "tw_cloudfront" {
   elb_dns_name = "${module.tw_autoscaling.elb_dns_name}"
   elb_name     = "${module.tw_autoscaling.elb_name}"
   region       = "${var.region}"
+}
+
+module "tw_route53" {
+  source                 = "./modules/route53"
+  route53_primary_domain = "${var.route53_primary_domain}"
+  cf_domain_name         = "${module.tw_cloudfront.cf_domain_name}"
+  cf_hosted_zone_id      = "${module.tw_cloudfront.cf_hosted_zone_id}"
 }

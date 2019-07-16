@@ -34,6 +34,10 @@ variable "min_num_instances" {
   default = "3"
 }
 
+variable "desired_capacity" {
+  default = "3"
+}
+
 variable "max_threshold" {
   default = "80"
 }
@@ -48,4 +52,8 @@ variable "cloudfront_origin_bucket" {
 
 variable "region" {
   default = "us-east-1"
+}
+
+variable "route53_primary_domain" {
+  default = "www.bala.guru"
 }

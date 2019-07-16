@@ -14,9 +14,10 @@ data "aws_availability_zones" "available" {}
 #Create Public Subnets
 
 resource "aws_subnet" "public_subnet1" {
-  vpc_id            = "${var.vpc_id}"
-  cidr_block        = "${var.public_subnet1_cidr}"
-  availability_zone = "${data.aws_availability_zones.available.names[0]}"
+  vpc_id                  = "${var.vpc_id}"
+  cidr_block              = "${var.public_subnet1_cidr}"
+  availability_zone       = "${data.aws_availability_zones.available.names[0]}"
+  map_public_ip_on_launch = true
 
   tags {
     Name = "${var.public_subnet1_tag_name}"
@@ -24,9 +25,10 @@ resource "aws_subnet" "public_subnet1" {
 }
 
 resource "aws_subnet" "public_subnet2" {
-  vpc_id            = "${var.vpc_id}"
-  cidr_block        = "${var.public_subnet2_cidr}"
-  availability_zone = "${data.aws_availability_zones.available.names[1]}"
+  vpc_id                  = "${var.vpc_id}"
+  cidr_block              = "${var.public_subnet2_cidr}"
+  availability_zone       = "${data.aws_availability_zones.available.names[1]}"
+  map_public_ip_on_launch = true
 
   tags {
     Name = "${var.public_subnet2_tag_name}"
@@ -34,12 +36,13 @@ resource "aws_subnet" "public_subnet2" {
 }
 
 resource "aws_subnet" "public_subnet3" {
-  vpc_id            = "${var.vpc_id}"
-  cidr_block        = "${var.public_subnet3_cidr}"
-  availability_zone = "${data.aws_availability_zones.available.names[2]}"
+  vpc_id                  = "${var.vpc_id}"
+  cidr_block              = "${var.public_subnet3_cidr}"
+  availability_zone       = "${data.aws_availability_zones.available.names[2]}"
+  map_public_ip_on_launch = true
 
   tags {
-    Name = "${var.public_subnet2_tag_name}"
+    Name = "${var.public_subnet3_tag_name}"
   }
 }
 

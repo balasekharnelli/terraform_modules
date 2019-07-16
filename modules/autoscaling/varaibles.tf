@@ -23,6 +23,10 @@ variable "min_num_instances" {
   default = "3"
 }
 
+variable "desired_capacity" {
+  default = "4"
+}
+
 variable "max_threshold" {
   default = "80"
 }

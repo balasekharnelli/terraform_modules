@@ -1,3 +1,7 @@
+resource "aws_cloudfront_origin_access_identity" "Assignment_TW" {
+  comment = "${var.cf_name}-cf"
+}
+
 # Create Cloudfront distribution
 resource "aws_cloudfront_distribution" "Assignment_TW" {
   comment          = "${var.cf_name}"
@@ -10,11 +14,8 @@ resource "aws_cloudfront_distribution" "Assignment_TW" {
     domain_name = "${aws_s3_bucket.Assignment_TW_Origin.bucket}.s3.amazonaws.com"
     origin_id   = "S3-${aws_s3_bucket.Assignment_TW_Origin.bucket}"
 
-    custom_origin_config {
-      http_port              = 80
-      https_port             = 443
-      origin_protocol_policy = "match-viewer"
-      origin_ssl_protocols   = ["TLSv1", "TLSv1.1", "TLSv1.2"]
+    s3_origin_config {
+      origin_access_identity = "${aws_cloudfront_origin_access_identity.Assignment_TW.cloudfront_access_identity_path}"
     }
   }
 
@@ -32,21 +33,22 @@ resource "aws_cloudfront_distribution" "Assignment_TW" {
   }
 
   # By default, show index.html file
-  default_root_object = "index.html"
+  default_root_object = "index.jsp"
 
   # If there is a 404, return index.html with a HTTP 200 Response
   custom_error_response {
     error_caching_min_ttl = 3000
     error_code            = 404
     response_code         = 200
-    response_page_path    = "/index.html"
+    response_page_path    = "/index.jsp"
   }
 
   #Default Behaviour served by S3
   default_cache_behavior {
-    allowed_methods  = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
-    cached_methods   = ["GET", "HEAD"]
-    target_origin_id = "S3-${aws_s3_bucket.Assignment_TW_Origin.bucket}"
+    allowed_methods        = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
+    cached_methods         = ["GET", "HEAD"]
+    target_origin_id       = "S3-${aws_s3_bucket.Assignment_TW_Origin.bucket}"
+    viewer_protocol_policy = "redirect-to-https"
 
     "forwarded_values" {
       "cookies" {
@@ -62,8 +64,9 @@ resource "aws_cloudfront_distribution" "Assignment_TW" {
     max_ttl                = 86400
   }
 
+  #Ordered Cache Behaviour with Precedence 1
   ordered_cache_behavior {
-    path_pattern           = "*"
+    path_pattern           = "/"
     allowed_methods        = ["GET", "HEAD"]
     cached_methods         = ["GET", "HEAD"]
     target_origin_id       = "ELB-${var.elb_name}"

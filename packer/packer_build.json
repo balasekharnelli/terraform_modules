@@ -1,0 +1,46 @@
+{
+  "variables": {
+    "aws_access_key": "AKIA3NLEUEJHHJHJCG4AXPFHX6ASSBBBANVBNASNVDNB",
+    "aws_secret_key": "WvgQdvaBwLEMs64isajdjfhjdsnmw0nkfTNALd/+qB9ZDIjWImCJ"
+  },
+"builders": [{
+"type": "amazon-ebs",
+"access_key": "{{user `aws_access_key`}}",
+"secret_key": "{{user `aws_secret_key`}}",
+"region": "us-east-1",
+"source_ami": "ami-035b3c7efe6d061d5",
+"instance_type": "t2.micro",
+"ssh_username": "ec2-user",
+"ami_name": "packer-tw-assignment-{{timestamp}}",
+     "ami_description": "EC2 AMI",
+     "tags": {
+       "Name": "tw-assignment-webserver"
+     },
+     "run_tags": {
+       "role": "Assignment_Web"
+     }
+    }
+],
+"provisioners": [
+  {
+    "type": "shell",
+    "execute_command": "sudo env {{ .Vars }} bash -e -c '{{.Path}}'",
+    "scripts": [
+    "provision.sh"
+    ]
+  },
+  {
+    "type": "file",
+    "source": "./app_war",
+    "destination": "/tmp"
+  },
+  {
+    "type": "shell",
+    "execute_command": "sudo env {{ .Vars }} bash -e -c '{{.Path}}'",
+    "scripts": [
+    "start.sh"
+    ]
+  }
+
+]
+}

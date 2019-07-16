@@ -1,0 +1,12 @@
+body {
+	font-family: sans-serif;
+}
+
+h1 {
+  font-size: large;
+}
+
+.timestamp {
+	 font-size:80%;
+	 color:#999;
+}
