@@ -1,9 +1,15 @@
 #Components used
 Terraform - To provision Infra
+
+
 Packer - To create base image
 
 Cloudfront - Content Delivery
+
+
 Autoscaling - To scale automatically
+
+
 S3 - For static Content
 
 
