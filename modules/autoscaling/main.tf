@@ -13,7 +13,6 @@ data "aws_ami" "web_server" {
 resource "aws_launch_configuration" "Assignment_TW" {
   name_prefix     = "Assignment_TW_Webserver-"
   image_id        = "${data.aws_ami.web_server.image_id}"
-  image_id        = "${var.ami_id}"
   instance_type   = "${var.ec2_instance_type}"
   security_groups = ["${aws_security_group.instance_sg.id}"]
   key_name        = "${aws_key_pair.Assignment_TW.key_name}"
